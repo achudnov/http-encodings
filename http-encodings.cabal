@@ -1,5 +1,5 @@
 Name:                http-encodings
-Version:             0.9
+Version:             0.9.1
 Synopsis:            A library for encoding and decoding bodies of HTTP messages
 Description: A library for encoding and decoding bodies of HTTP messages, designed to work with the HTTP and http-server libraries. No heuristic encoding detection at this time. WANTED: a library implementing the Unix "compress" command encoding/decoding (or the LZW algorithm).
 
@@ -22,7 +22,7 @@ source-repository head
 source-repository this
    type: git
    location: git://github.com/achudnov/http-encodings.git
-   tag: 0.9
+   tag: 0.9.1
 
 Library
   Exposed-modules:     Network.HTTP.Encoding, 
@@ -31,7 +31,7 @@ Library
                        Network.HTTP.Encoding.Error  
   Build-depends: base        == 4.*
                , HTTP        == 4000.*
-               , bytestring  >= 0.9 && < 0.10
+               , bytestring  >= 0.9 && < 0.11
                , parsec      == 3.*
                , utf8-string == 0.3.*
                , iconv       == 0.4.*
