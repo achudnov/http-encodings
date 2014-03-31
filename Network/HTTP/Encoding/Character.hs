@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | Detection and of character encodings of HTTP message bodies
 module Network.HTTP.Encoding.Character 
        (getContentTypeAndCharacterEncoding
@@ -13,6 +15,9 @@ import Data.Char (toLower, ord)
 import Data.ByteString.Lazy.UTF8 (uncons)
 import Data.ByteString.Lazy (ByteString)
 import Control.Monad
+import Data.Text (Text, unpack, pack)
+import qualified Data.Text as Text
+import Data.Maybe (listToMaybe)
 
 -- | Looks for and parses the ContentType header. Returns the
 -- (optional) content-type and (optional) the character encoding name.
@@ -32,25 +37,29 @@ setCharacterEncoding enc ((Header HdrContentType str):rest) =
   let (mtype, _) = parseContentTypeHdr str
       newhdr = case mtype of
         Nothing -> plainText enc
-        Just ty -> Header HdrContentType $ showType $ setMIMEEncoding ty enc
+        Just ty -> Header HdrContentType $ unpack $ showType $ setMIMEEncoding ty enc
   in newhdr:rest
 
 plainText :: EncodingName -> Header
-plainText enc = Header HdrContentType $ showType $
+plainText enc = Header HdrContentType $ unpack $ showType $
                 Type {mimeType = (Text "plain")
-                     ,mimeParams = [("charset", enc)]}
+                     ,mimeParams = [MIMEParam {paramName = "charset"
+                                              ,paramValue = pack enc}]}
 
 setMIMEEncoding :: Type -> EncodingName -> Type
 setMIMEEncoding ty enc = ty {mimeParams = map replaceEnc $ mimeParams ty}
-  where replaceEnc (pname, _) | pname == "charset" = (pname, enc)
+  where replaceEnc param | paramName param == "charset" =
+          param {paramValue = pack enc}
         replaceEnc x = x
 
 parseContentTypeHdr :: String -> (Maybe Type, Maybe EncodingName)
-parseContentTypeHdr str = 
-  case parseContentType str of
+parseContentTypeHdr str =
+  case parseContentType (pack str) of
     Nothing    -> (Nothing, Nothing)
     Just ctype -> (Just ctype, 
-                   (map toLower) <$> lookup "charset" (mimeParams ctype))
+                   (unpack . Text.map toLower . paramValue) <$> 
+                   listToMaybe (filter (\p -> paramName p == "charset")
+                                (mimeParams ctype)))
 
 -- | Tries to decode a bytestring as UTF-8. Returns nothing if any
 -- illegal characters are encountered
