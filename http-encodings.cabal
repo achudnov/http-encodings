@@ -1,7 +1,7 @@
 Name:                http-encodings
 Version:             0.9.3
 Synopsis:            A library for encoding and decoding bodies of HTTP messages
-Description: A library for encoding and decoding bodies of HTTP messages, designed to work with the HTTP and http-server libraries. No heuristic encoding detection at this time. WANTED: a library implementing the Unix "compress" command encoding/decoding (or the LZW algorithm).
+Description: A library for encoding and decoding bodies of HTTP messages, designed to work with the HTTP and http-server libraries. No heuristic encoding detection at this time. WANTED: a library implementing the Unix "compress" command encoding/decoding (or the LZW algorithm). Note that the package versions follow Semantic Versioning model (semver.org).
 
 License:             BSD3
 License-file:        LICENSE
@@ -15,6 +15,7 @@ Build-type:          Simple
 Stability:           Experimental
 Cabal-version:       >=1.10
 Tested-with:         GHC==7.6.3, GHC==7.4.2, GHC==7.8.2
+Extra-Source-Files:  CHANGELOG
 
 source-repository head
    type: git
