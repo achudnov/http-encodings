@@ -35,7 +35,7 @@ Library
                , HTTP        == 4000.*
                , bytestring  >= 0.9 && < 0.11
                , parsec      == 3.*
-               , utf8-string == 0.3.*
+               , utf8-string == 1.*
                , iconv       == 0.4.*
                , zlib        == 0.5.*
                , mtl         == 2.*
